@@ -36,12 +36,12 @@ router.post("/", (req, res) => {
   res.sendStatus(200);
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id/admin", (req, res) => {
     UpdateChirp(req.params.id, req.body);
   res.sendStatus(200);
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id/admin", (req, res) => {
   DeleteChirp(req.params.id);
   res.sendStatus(200);
 });

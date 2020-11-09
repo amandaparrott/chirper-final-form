@@ -63,8 +63,7 @@ const EditChirps: React.FC<IEditProps> = () => {
             let chirp = await res.json();
             setUser(chirp.user);
             setText(chirp.text);
-        }
-        )
+        })
     }, [chirpid]);
 
     return (
