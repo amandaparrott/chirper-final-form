@@ -25,7 +25,13 @@ router.get("/", (req: Express.Request, res: express.Response) => {
 
 router.get("/:id", (req, res) => {
   let id = req.params.id;
-  res.send(GetChirp(id));
+  const data = GetChirp(id)
+  const chirp = {
+    id: id,
+    user: data.user,
+    text: data.text
+  }
+  res.send(JSON.stringify(chirp));
 });
 
 router.post("/", (req, res) => {
@@ -36,12 +42,12 @@ router.post("/", (req, res) => {
   res.sendStatus(200);
 });
 
-router.put("/:id/admin", (req, res) => {
+router.put("/:id", (req, res) => {
     UpdateChirp(req.params.id, req.body);
   res.sendStatus(200);
 });
 
-router.delete("/:id/admin", (req, res) => {
+router.delete("/:id", (req, res) => {
   DeleteChirp(req.params.id);
   res.sendStatus(200);
 });

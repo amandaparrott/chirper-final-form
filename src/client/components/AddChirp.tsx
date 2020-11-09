@@ -14,7 +14,7 @@ const AddChirp: React.FC<IAddChirpProps> = props => {
     history.push('/');
   }
 
-  
+
   const history = useHistory();
 
 
@@ -33,48 +33,45 @@ const AddChirp: React.FC<IAddChirpProps> = props => {
     })
     if (res.ok) {
       console.log('chirp posted');
-     
+
     } else {
       console.log('chirp not posted');
     }
   }
-    useEffect(() => {
-      newChirp();
-    }, []);
-  
-    return (
-      <form className="d-flex justify-content-center align-items center">
-        <div className="form-group col col-6 shadow-lg border border-info rounded mt-3 text-center">
-          <label className="font-weight-bolder">Username</label>
+
+  return (
+    <form className="d-flex justify-content-center align-items center">
+      <div className="form-group col col-6 shadow-lg border border-info rounded mt-3 text-center">
+        <label className="font-weight-bolder">Username</label>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Enter username here"
+          value={user}
+          onChange={(e) => handleUserChange(e)}
+        ></input>
+        <div className="form-group">
+          <label className="font-weight-bolder">Chirp</label>
           <input
             type="text"
             className="form-control"
-            placeholder="Enter username here"
-            value={user}
-            onChange={(e) => handleUserChange(e)}
+            placeholder="Chirp it out!"
+            value={text}
+            onChange={(e) => handleTextChange(e)}
           ></input>
-          <div className="form-group">
-            <label className="font-weight-bolder">Chirp</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Chirp it out!"
-              value={text}
-              onChange={(e) => handleTextChange(e)}
-            ></input>
-          </div>
-          <button
-            className="btn btn-info btn-block w-50 mx-auto shadow-sm mb-2"
-            onClick={e => handleClick(e)}
-          >
-            Chirp Chirp Bro!
-              </button>
         </div>
-      </form>
-    )
-    
+        <button
+          className="btn btn-info btn-block w-50 mx-auto shadow-sm mb-2"
+          onClick={e => handleClick(e)}
+        >
+          Chirp Chirp Bro!
+              </button>
+      </div>
+    </form>
+  )
+
 }
-interface IAddChirpProps extends RouteComponentProps<{id: string}> {
+interface IAddChirpProps extends RouteComponentProps<{ id: string }> {
   id: number;
   user: string;
   text: string;

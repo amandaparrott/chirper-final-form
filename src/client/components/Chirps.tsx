@@ -2,7 +2,7 @@ import React from 'react';
 import ChirpBody from './ChirpBody';
 import { useState, useEffect } from 'react';
 
-const Chirps: React.FC<IChirpsProps> = props => {
+const ChirpsTimeline: React.FC<IChirpsProps> = props => {
     const [chirps, setChirps] = useState<IChirp[]>([])
 
     useEffect(() => {
@@ -16,7 +16,7 @@ const Chirps: React.FC<IChirpsProps> = props => {
 
         getChirps();
     }, []);
-// map through chirps
+
     return (
         <div>
             {chirps.map((chirp) => (  <ChirpBody  chirp={chirp} key={chirp.id} />))}
@@ -34,4 +34,4 @@ interface IChirp {
 
 interface IChirpsProps {}
 
-export default Chirps;
+export default ChirpsTimeline;

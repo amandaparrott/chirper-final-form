@@ -1,82 +1,69 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useHistory, RouteComponentProps } from 'react-router-dom';
 
-const EditChirps: React.FC<IEditProps> = () => {
-
-    const { chirpid } = useParams();
-    const history = useHistory();
+const EditChirps: React.FC<IEditProps> = (props: IEditProps) => {
 
     const [user, setUser] = useState<string>('');
     const [text, setText] = useState<string>('');
 
+    useEffect(() => {
+        (async () => {
+            let res = await fetch(`/api/chirps/${props.match.params.id}`);
+            let chirp = await res.json();
+            setUser(chirp.user);
+            setText(chirp.text);
+        })()
+    }, []);
+
     const handleUserChange = (e) => setUser(e.target.value);
     const handleTextChange = (e) => setText(e.target.value);
-    const handleEditButton = (e) => {
-        e.preventDefault();
-        editChirp();
-    }
-    const handleDeleteButton = (e) => {
-        e.preventDefault();
-    }
 
-
-    const editChirp = async () => {
+    const editChirp = async (id: string) => {
         const chirp = {
             user: user,
             text: text
         };
-        let res = await fetch(`/api/chirps/${chirpid}`, {
+
+        let res = await fetch(`/api/chirps/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ user, text })
+            body: JSON.stringify(chirp)
         })
-        if (res.ok) {
-            history.push('/');
-            console.log('chirp edited');
 
+        if (res.ok) {
+            props.history.push('/');
+            console.log('chirp edited');
         } else {
             console.log('chirp edit failed');
         }
     }
-    useEffect(() => {
-        editChirp();
-    }, []);
 
-    const deleteChirp = async (e) => {
-        e.preventDefault();
-        let res = await fetch(`/chirps/${chirpid}`, {
+    const deleteChirp = async (id: string) => {
+        let res = await fetch(`/api/chirps/${id}`, {
             method: 'DELETE',
         });
         if (res.ok) {
             console.log('chirp deleted');
-            history.push('/');
+            props.history.push('/');
         } else {
             console.log('delete not successful');
         }
     }
-    useEffect(() => {
-        (async () => {
-            let res = await fetch(`/chirps/${chirpid}`);
-            let chirp = await res.json();
-            setUser(chirp.user);
-            setText(chirp.text);
-        })
-    }, [chirpid]);
 
     return (
         <div className="card text-center d-flex justify-content-center m-3 shadow-lg border border-info rounded">
             <div className="card-body">
-                <textarea className="card-text" onChange={e => handleUserChange(e)}>{user}</textarea>
-                <textarea className="card-text" onChange={e => handleTextChange(e)}>{text}</textarea>
-                <button className="btn btn-info rounded" onClick={e => handleEditButton(e)}>Save Edit</button>
-                <button className="btn btn-info rounded" onClick={e => handleDeleteButton(e)}>Delete Chirp</button>
+                <textarea className="card-text" defaultValue={user} onChange={(e) => handleUserChange(e)}></textarea>
+                <textarea className="card-text" defaultValue={text} onChange={(e) => handleTextChange(e)}></textarea>
+                <button className="btn btn-info rounded" onClick={() => editChirp(props.match.params.id)}>Save Edit</button>
+                <button className="btn btn-info rounded" onClick={() => deleteChirp(props.match.params.id)}>Delete Chirp</button>
             </div>
         </div>
     )
 }
 
-interface IEditProps { }
+interface IEditProps extends RouteComponentProps<{id: string}> { }
 export default EditChirps;
